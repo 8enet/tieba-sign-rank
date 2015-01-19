@@ -1,5 +1,7 @@
 package com.zzzmode.tieba.signrank;
 
+import com.zzzmode.tieba.signrank.result.IndexPagerResult;
+import com.zzzmode.tieba.signrank.utils.Utils;
 import com.zzzmode.tieba.signrank.work.SignRankHandler;
 import com.zzzmode.tieba.signrank.work.SpiderWork;
 
@@ -19,8 +21,9 @@ public class RankMain {
 
             System.out.println("------SignRankHandler ");
             SignRankHandler handler=new SignRankHandler("java");
-
-            print(handler.getRankTop(2));
+            Set<IndexPagerResult> indexPageResult = handler.getIndexPageResult(3);
+            print(indexPageResult);
+            print(Utils.mergeResult(indexPageResult,null));
 
 
 
