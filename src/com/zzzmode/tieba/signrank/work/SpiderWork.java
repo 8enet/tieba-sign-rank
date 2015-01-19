@@ -1,5 +1,6 @@
-package com.zzzmode.tieba.signrank;
+package com.zzzmode.tieba.signrank.work;
 
+import com.zzzmode.tieba.signrank.UserInfo;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

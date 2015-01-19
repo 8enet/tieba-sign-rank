@@ -1,13 +1,9 @@
 package com.zzzmode.tieba.signrank;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import sun.security.action.GetPropertyAction;
+import com.zzzmode.tieba.signrank.work.SpiderWork;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
