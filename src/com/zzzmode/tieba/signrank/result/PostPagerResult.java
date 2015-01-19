@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Created by zl on 15/1/19.
  */
-public class PostPagerResult extends SampleResult implements PageResult,DocumentPaser<Set<UserInfo>> {
+public class PostPagerResult extends SampleResult implements PageResult<UserInfo>,DocumentPaser<PageResult<Set<UserInfo>>> {
     @Override
     public boolean hasNext() {
         return false;
@@ -27,8 +27,7 @@ public class PostPagerResult extends SampleResult implements PageResult,Document
 
 
     @Override
-    public Set<UserInfo> paser(Document document) {
-
+    public PageResult<Set<UserInfo>> paser(Document document) {
         return null;
     }
 }

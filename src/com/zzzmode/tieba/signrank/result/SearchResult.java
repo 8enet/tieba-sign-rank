@@ -9,13 +9,10 @@ import java.util.Set;
 /**
  * Created by zl on 15/1/19.
  */
-public class SearchResult extends SampleResult implements PageResult,DocumentPaser<String> {
+public class SearchResult extends SampleResult implements PageResult<String>,DocumentPaser<PageResult<String>> {
 
 
-    @Override
-    public String paser(Document document) {
-        return null;
-    }
+
 
     @Override
     public boolean hasNext() {
@@ -23,12 +20,17 @@ public class SearchResult extends SampleResult implements PageResult,DocumentPas
     }
 
     @Override
-    public Set<UserInfo> getParseResult() {
+    public Set<String> getParseResult() {
         return null;
     }
 
     @Override
     public String getNextUrl() {
+        return null;
+    }
+
+    @Override
+    public PageResult<String> paser(Document document) {
         return null;
     }
 }

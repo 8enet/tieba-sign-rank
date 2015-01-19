@@ -1,5 +1,6 @@
 package com.zzzmode.tieba.signrank;
 
+import com.zzzmode.tieba.signrank.work.SignRankHandler;
 import com.zzzmode.tieba.signrank.work.SpiderWork;
 
 import java.io.*;
@@ -13,14 +14,19 @@ import java.util.concurrent.TimeUnit;
 public class RankMain {
 
     public static void main(String[] args){
-        File file=new File("f.bin");
-        try (
 
-             ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(file));
+        try {
+
+            System.out.println("------SignRankHandler ");
+            SignRankHandler handler=new SignRankHandler("java");
+
+            print(handler.getRankTop(2));
 
 
 
-        ){
+            if(true)
+                return;
+
 
             /*
             Document document= Jsoup.connect("http://tieba.baidu.com/p/3533945191").userAgent(SpiderWork.UserAgent).get();
