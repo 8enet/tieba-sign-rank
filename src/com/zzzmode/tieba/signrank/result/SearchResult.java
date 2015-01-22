@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Created by zl on 15/1/19.
  */
-public class SearchResult extends SampleResult implements PageResult<String>,DocumentPaser<PageResult<String>> {
+public class SearchResult extends SampleResult implements PageResult<String>,DocumentPaser {
 
 
 
@@ -30,7 +30,7 @@ public class SearchResult extends SampleResult implements PageResult<String>,Doc
     }
 
     @Override
-    public PageResult<String> paser(Document document) {
-        return null;
+    public SearchResult paser(Document document) {
+        return this;
     }
 }

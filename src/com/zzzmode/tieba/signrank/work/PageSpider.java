@@ -6,11 +6,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by zl on 15/1/19.
  */
 public class PageSpider<T> implements Callable<T> {
+
+    private static  Logger log ;
+    static {
+        log= Logger.getLogger("PageSpider");
+        log.setLevel(Level.INFO);
+    }
+
 
     private Object tag;
     private String url;
@@ -34,8 +43,8 @@ public class PageSpider<T> implements Callable<T> {
 
     @Override
     public T call() throws Exception {
+        log.info(" spider  url :"+url);
         Document document = Jsoup.connect(url).userAgent(Configs.HTTP.USER_AGENT).timeout(Configs.HTTP.CONNECT_TIMEOUT).get();
-
         return paser.paser(document);
     }
 }

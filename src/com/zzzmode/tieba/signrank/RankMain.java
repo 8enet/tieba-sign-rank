@@ -1,11 +1,12 @@
 package com.zzzmode.tieba.signrank;
 
 import com.zzzmode.tieba.signrank.result.IndexPagerResult;
+import com.zzzmode.tieba.signrank.result.PostPagerResult;
+import com.zzzmode.tieba.signrank.utils.MergeManager;
 import com.zzzmode.tieba.signrank.utils.Utils;
 import com.zzzmode.tieba.signrank.work.SignRankHandler;
 import com.zzzmode.tieba.signrank.work.SpiderWork;
 
-import java.io.*;
 import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -19,11 +20,35 @@ public class RankMain {
 
         try {
 
-            System.out.println("------SignRankHandler ");
+
+
+            System.out.println("------- SignRankHandler --------");
             SignRankHandler handler=new SignRankHandler("java");
             Set<IndexPagerResult> indexPageResult = handler.getIndexPageResult(3);
-            print(indexPageResult);
-            print(Utils.mergeResult(indexPageResult,null));
+            Set<String> urls=new HashSet<>();
+            for (IndexPagerResult result:indexPageResult){
+                System.out.println (result.getPostUrl().size());
+                urls.addAll(result.getPostUrl());
+            }
+
+            System.out.println("----------------=========== ");
+
+
+            Set<PostPagerResult> postPageResult = handler.getPostPageResult(urls);
+
+            MergeManager<UserInfo> mergeManager=new MergeManager<>(UserInfo.sortBySignDays);
+
+            for (PostPagerResult result:postPageResult){
+                System.out.println(result.hasNext() +"     "+result.getNextUrl());
+                //print(result.getParseResult());
+                mergeManager.addPart(result.getParseResult());
+            }
+
+            print(mergeManager.merges(null));
+
+
+
+            // print(Utils.mergeUserResult(indexPageResult, null));
 
 
 

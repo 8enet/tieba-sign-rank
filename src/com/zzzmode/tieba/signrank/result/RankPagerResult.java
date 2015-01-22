@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Created by zl on 15/1/19.
  */
-public class RankPagerResult extends SampleResult<Set<UserInfo>> implements PageResult<UserInfo>,DocumentPaser<Set<UserInfo>> {
+public class RankPagerResult extends SampleResult<Set<UserInfo>> implements PageResult<UserInfo>,DocumentPaser<RankPagerResult> {
 
 
     @Override
@@ -32,7 +32,7 @@ public class RankPagerResult extends SampleResult<Set<UserInfo>> implements Page
     }
 
     @Override
-    public Set<UserInfo> paser(Document document) {
+    public RankPagerResult paser(Document document) {
         Elements select = document.select("table.drl_list").select("tr.drl_list_item");
         Set<UserInfo> data = new HashSet<>();
         Pattern pattern = Pattern.compile("[^\\d]");
@@ -47,8 +47,6 @@ public class RankPagerResult extends SampleResult<Set<UserInfo>> implements Page
             data.add(info);
         }
         result=data;
-        return data;
-
-
+        return this;
     }
 }

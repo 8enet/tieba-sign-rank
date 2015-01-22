@@ -1,8 +1,8 @@
 package com.zzzmode.tieba.signrank.work;
 
-import com.zzzmode.tieba.signrank.UserInfo;
 import com.zzzmode.tieba.signrank.result.IndexPagerResult;
 import com.zzzmode.tieba.signrank.result.PageResult;
+import com.zzzmode.tieba.signrank.result.PostPagerResult;
 import com.zzzmode.tieba.signrank.result.RankPagerResult;
 
 import java.io.UnsupportedEncodingException;
@@ -41,13 +41,12 @@ public class SignRankHandler {
         for (int i = 0; i < indexPage; i++) {
             ranks.add(new PageSpider(baseUrl + (i + 1), new RankPagerResult()));
         }
-        List<Future<RankPagerResult>> futures = threadPoolExecutor.invokeAll(ranks);
-        return getResult(futures);
 
+        return getResult(threadPoolExecutor.invokeAll(ranks));
     }
 
 
-    private static <T> Set<T> getResult(List<Future<T>> list) throws ExecutionException, InterruptedException {
+    private static <T> Set<T> getResult(List<Future<T>> list) throws Exception {
         if(list != null){
             Set<T> data=new HashSet<>();
             for (Future<T> future:list){
@@ -62,6 +61,7 @@ public class SignRankHandler {
 
 
 
+
     /**
      * 获取前indexPage 页
      * @param indexPage
@@ -71,13 +71,29 @@ public class SignRankHandler {
         String basUrl = Configs.HTTP.BASE_URL + "/f?kw=" + baName + "&ie=utf-8&pn=";
         List<PageSpider<IndexPagerResult>> tasks = new ArrayList<>();
         for (int i = 0; i < indexPage; i++) {
-
             tasks.add(new PageSpider(basUrl + (i * 50), new IndexPagerResult()));
         }
-
-        List<Future<IndexPagerResult>> futures = threadPoolExecutor.invokeAll(tasks);
-
-        return getResult(futures);
+        return getResult(threadPoolExecutor.invokeAll(tasks));
     }
+
+
+    /**
+     * 获取贴子详情
+     * @param posts
+     * @return
+     * @throws Exception
+     */
+    public Set<PostPagerResult> getPostPageResult(Set<String> posts) throws Exception {
+        if(posts == null)
+            return null;
+        List<PageSpider<PostPagerResult>> tasks = new ArrayList<>();
+        for (String url:posts){
+            tasks.add(new PageSpider(Configs.HTTP.BASE_URL+url,new PostPagerResult()));
+        }
+
+        return getResult(threadPoolExecutor.invokeAll(tasks));
+    }
+
+
 
 }

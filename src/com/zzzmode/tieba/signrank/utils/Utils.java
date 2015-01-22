@@ -11,25 +11,21 @@ import java.util.*;
 public class Utils {
 
 
-    public static Set<UserInfo> mergeResult(Set<? extends PageResult> list,Comparator<UserInfo> sort){
-        if(list != null){
+    public static Set<UserInfo> mergeUserResult(Comparator<UserInfo> sort,PageResult... res ){
+        if(res != null){
             Set<UserInfo> data=null;
             if(sort != null){
                 data=new TreeSet<>(sort);
             }else {
                 data=new HashSet<>();
             }
-            System.out.println(list.getClass());
-            for(Object page:list){
-//                if(page != null){
-//                    data.addAll(page.getParseResult());
-//                }
 
-                System.out.println(page.getClass());
+            for(PageResult page:res){
+                if(page != null){
+                    data.addAll(page.getParseResult());
+                }
             }
             return data;
-
-
         }
 
         return null;
