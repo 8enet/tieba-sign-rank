@@ -21,9 +21,19 @@ public class RankMain {
         try {
 
 
+            long s=System.currentTimeMillis();
 
-            System.out.println("------- SignRankHandler --------");
+            System.out.println("------- TiebaSignRank --------");
             SignRankHandler handler=new SignRankHandler("java");
+
+            print(handler.getRankTop(5));
+
+            if(true){
+                handler.shutdown();
+                System.out.println("times : "+(System.currentTimeMillis()-s)+"    count:"+handler.getSpiderCount());
+                return;
+            }
+
             Set<IndexPagerResult> indexPageResult = handler.getIndexPageResult(3);
             Set<String> urls=new HashSet<>();
             for (IndexPagerResult result:indexPageResult){
@@ -31,20 +41,23 @@ public class RankMain {
                 urls.addAll(result.getPostUrl());
             }
 
-            System.out.println("----------------=========== ");
+
+//            Set<PostPagerResult> postPageResult = handler.getPostPageResult(urls);
+//
+//            MergeManager<UserInfo> mergeManager=new MergeManager<>(UserInfo.sortBySignDays);
+//
+//            for (PostPagerResult result:postPageResult){
+//                //System.out.println(result.hasNext() +"     "+result.getNextUrl());
+//                //print(result.getParseResult());
+//                mergeManager.addPart(result.getParseResult());
+//            }
+//
+//            print(mergeManager.merges(null));
+            Set<UserInfo> res=handler.getPostPageResult(urls);
 
 
-            Set<PostPagerResult> postPageResult = handler.getPostPageResult(urls);
 
-            MergeManager<UserInfo> mergeManager=new MergeManager<>(UserInfo.sortBySignDays);
-
-            for (PostPagerResult result:postPageResult){
-                System.out.println(result.hasNext() +"     "+result.getNextUrl());
-                //print(result.getParseResult());
-                mergeManager.addPart(result.getParseResult());
-            }
-
-            print(mergeManager.merges(null));
+            print(res);
 
 
 
@@ -52,8 +65,8 @@ public class RankMain {
 
 
 
-            if(true)
-                return;
+
+
 
 
             /*
@@ -93,7 +106,7 @@ public class RankMain {
 
 
 
-            long s=System.currentTimeMillis();
+            long st=System.currentTimeMillis();
             Set<UserInfo> rs1=new HashSet<>();
             SpiderWork spiderWork=new SpiderWork("java");
 

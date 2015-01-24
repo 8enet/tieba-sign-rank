@@ -87,6 +87,12 @@ public class UserInfo implements Serializable{
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+
+        return result;
+    }
 
     public  void copy(UserInfo info){
         if(info != null && info.getName() != null && info.getName().equals(getName())){
@@ -163,9 +169,9 @@ public class UserInfo implements Serializable{
         public int compare(UserInfo o1, UserInfo o2) {
             if(o1 == null || o2==null)
                 return 0;
-            if(o1.getTop() > o2.getTop())
-                return -1;
             if(o1.getTop() < o2.getTop())
+                return -1;
+            if(o1.getTop() > o2.getTop())
                 return 1;
             return o1.getName().compareTo(o2.getName());
         }

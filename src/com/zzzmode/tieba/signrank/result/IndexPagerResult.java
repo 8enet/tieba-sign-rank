@@ -59,7 +59,6 @@ public class IndexPagerResult extends SampleResult<Set<UserInfo>> implements Pag
                 user.setName(element.text());
                 String s = pattern.matcher(element.attr("title")).replaceAll("");
                 user.setSignDays(Integer.parseInt(s.substring(0, s.length() - 2)));
-                //pUsers.add(user);
                 list.add(user);
 
             } catch (Exception e) {
