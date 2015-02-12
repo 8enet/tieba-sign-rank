@@ -59,7 +59,6 @@ public class PostPagerResult extends SampleResult<Set<UserInfo>> implements Page
         if (select != null && select.size() > 0) {
             for (int i = 0; i < select.size(); i++) {
                 if ("下一页".equals(select.get(i).text())) {
-                    //System.out.println(select.get(i));
                     nextUrl = select.get(i).attr("href");
                     if(nextUrl != null){
                         try {

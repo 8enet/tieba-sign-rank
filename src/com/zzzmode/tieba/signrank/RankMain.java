@@ -21,17 +21,19 @@ public class RankMain {
         try {
 
 
+            long st=System.currentTimeMillis();
 
-            System.out.println("------- SignRankHandler --------");
+            System.out.println("-------- SignRankHandler --------");
             SignRankHandler handler=new SignRankHandler("java");
             Set<IndexPagerResult> indexPageResult = handler.getIndexPageResult(3);
             Set<String> urls=new HashSet<>();
             for (IndexPagerResult result:indexPageResult){
-                System.out.println (result.getPostUrl().size());
+                //System.out.println (result.getPostUrl().size());
                 urls.addAll(result.getPostUrl());
             }
 
-            System.out.println("----------------=========== ");
+            System.out.println(" all urls : "+urls.size());
+            System.out.println("----------------");
 
 
             Set<PostPagerResult> postPageResult = handler.getPostPageResult(urls);
@@ -39,21 +41,20 @@ public class RankMain {
             MergeManager<UserInfo> mergeManager=new MergeManager<>(UserInfo.sortBySignDays);
 
             for (PostPagerResult result:postPageResult){
-                System.out.println(result.hasNext() +"     "+result.getNextUrl());
+                //System.out.println(result.hasNext() +"     "+result.getNextUrl());
                 //print(result.getParseResult());
                 mergeManager.addPart(result.getParseResult());
             }
 
-            print(mergeManager.merges(null));
+            print(mergeManager.merges());
 
 
-
-            // print(Utils.mergeUserResult(indexPageResult, null));
-
-
-
-            if(true)
+            if(true){
+                double s=System.currentTimeMillis()-st;
+                System.out.println("seconds time: "+( (s/1000d)));
                 return;
+            }
+
 
 
             /*

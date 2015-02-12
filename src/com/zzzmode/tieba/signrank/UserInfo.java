@@ -124,7 +124,7 @@ public class UserInfo implements Serializable{
 
 
 
-    public transient static Comparator<UserInfo> sortBySignDays =new Comparator<UserInfo>() {
+    public transient static final Comparator<UserInfo> sortBySignDays =new Comparator<UserInfo>() {
 
         @Override
         public int compare(UserInfo o1, UserInfo o2) {
@@ -141,7 +141,7 @@ public class UserInfo implements Serializable{
     };
 
 
-    public transient static Comparator<UserInfo> sortByExperience=new Comparator<UserInfo>() {
+    public transient static final Comparator<UserInfo> sortByExperience=new Comparator<UserInfo>() {
 
         @Override
         public int compare(UserInfo o1, UserInfo o2) {
@@ -158,7 +158,7 @@ public class UserInfo implements Serializable{
     };
 
 
-    public transient static Comparator<UserInfo> sortByTop =new Comparator<UserInfo>() {
+    public transient static final Comparator<UserInfo> sortByTop =new Comparator<UserInfo>() {
         @Override
         public int compare(UserInfo o1, UserInfo o2) {
             if(o1 == null || o2==null)

@@ -29,20 +29,22 @@ public class MergeManager<T> {
 
     public Set<T> merges(Comparator comparator){
         if(comparator == null && this.comparator == null){
-
             return copy(new HashSet<T>());
         }
         if(comparator != null){
-            return copy(new TreeSet<T>(comparator));
+            return copy(new TreeSet(comparator));
         }
 
         if(this.comparator != null){
-            return copy(new TreeSet<T>(this.comparator));
+            return copy(new TreeSet(this.comparator));
         }
 
         return null;
     }
 
+    public Set<T> merges(){
+        return merges(null);
+    }
 
     private Set<T> copy(Set<T> res){
         if(clos != null){
@@ -51,6 +53,18 @@ public class MergeManager<T> {
             }
         }
         return res;
+    }
+
+
+    public void reset(){
+        try {
+            if(clos != null){
+                clos.clear();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 }
