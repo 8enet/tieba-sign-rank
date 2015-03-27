@@ -1,7 +1,6 @@
 package com.zzzmode.tieba.signrank.work;
 
 import com.zzzmode.tieba.signrank.paser.DocumentPaser;
-import com.zzzmode.tieba.signrank.result.PageResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 

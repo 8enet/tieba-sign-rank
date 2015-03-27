@@ -92,6 +92,8 @@ public class SignRankHandler {
     }
 
 
+
+
     /**
      * 获取贴子详情
      *
@@ -103,8 +105,6 @@ public class SignRankHandler {
         if (posts == null || retUsers == null)
             return;
 
-        CountDownLatch latch=new CountDownLatch(10);
-        latch.countDown();
 
         List<PageSpider<PostPagerResult>> tasks = new ArrayList<>();
         for (String url : posts) {
@@ -132,12 +132,18 @@ public class SignRankHandler {
     }
 
 
-
+    /**
+     * 获取贴子详情
+     * @param posts
+     * @return
+     * @throws Exception
+     */
     public Set<UserInfo> getPostPageResult(Set<String> posts) throws Exception {
-        Set<UserInfo> result=new TreeSet<>(UserInfo.sortBySignDays);
-        spiderDepth=0;
-        getPostPageResult(posts,result);
-        return result;
+        if(posts == null)
+            return null;
+        Set<UserInfo> retUsers=new HashSet<>();
+        getPostPageResult(posts,retUsers);
+        return retUsers;
     }
 
 

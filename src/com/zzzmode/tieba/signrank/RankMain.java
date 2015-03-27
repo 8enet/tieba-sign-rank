@@ -27,25 +27,42 @@ public class RankMain {
 
             SignRankHandler handler=new SignRankHandler("java");
 
-            print(handler.getRankTop(5));
-
-            if(true){
-                handler.shutdown();
-                System.out.println("times : "+(System.currentTimeMillis()-st)+"    count:"+handler.getSpiderCount());
-                return;
-            }
-
             Set<IndexPagerResult> indexPageResult = handler.getIndexPageResult(3);
             Set<String> urls=new HashSet<>();
             for (IndexPagerResult result:indexPageResult){
-                //System.out.println (result.getPostUrl().size());
+
                 urls.addAll(result.getPostUrl());
             }
 
 
 
 
+            System.out.println(" all urls : "+urls.size());
+            System.out.println("----------------");
 
+
+            Set<UserInfo> postPageResult = handler.getPostPageResult(urls);
+
+//            MergeManager<UserInfo> mergeManager=new MergeManager<>(UserInfo.sortBySignDays);
+//
+//            for (UserInfo result:postPageResult){
+//                //System.out.println(result.hasNext() +"     "+result.getNextUrl());
+//                //print(result.getParseResult());
+//                mergeManager.addPart(result);
+//            }
+//
+//            print(mergeManager.merges());
+            Set<UserInfo> res= new TreeSet(UserInfo.sortBySignDays);
+            res.addAll(postPageResult);
+            print(res);
+
+
+            if(true){
+                double s=System.currentTimeMillis()-st;
+                System.out.println("seconds time: "+( (s/1000d)));
+                handler.shutdown();
+                return;
+            }
 
 
 
