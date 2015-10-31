@@ -82,6 +82,8 @@ public class IndexPagerResult extends SampleResult<Set<UserInfo>> implements Pag
 
         result=list;
         return this;
-
     }
+
+
+
 }

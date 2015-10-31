@@ -1,15 +1,11 @@
 package com.zzzmode.tieba.signrank;
 
-import com.zzzmode.tieba.signrank.result.IndexPagerResult;
-import com.zzzmode.tieba.signrank.result.PostPagerResult;
-import com.zzzmode.tieba.signrank.utils.MergeManager;
-import com.zzzmode.tieba.signrank.utils.Utils;
 import com.zzzmode.tieba.signrank.work.SignRankHandler;
-import com.zzzmode.tieba.signrank.work.SpiderWork;
 
-import java.util.*;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by zl on 15/1/5.
@@ -17,61 +13,29 @@ import java.util.concurrent.TimeUnit;
 public class RankMain {
 
     public static void main(String[] args){
-
+        SignRankHandler handler=new SignRankHandler("java");
         try {
 
             long st=System.currentTimeMillis();
-
             System.out.println("-------- SignRankHandler --------");
 
-            SignRankHandler handler=new SignRankHandler("java");
             handler.setIgnoreLowDays(500);
 
-            Set<IndexPagerResult> indexPageResult = handler.getIndexPageResult(3);
-
-
-            Set<String> urls=new HashSet<>();
-            for (IndexPagerResult result:indexPageResult){
-                urls.addAll(result.getPostUrl());
-            }
-
-            System.out.println(" all urls : "+urls.size());
-            System.out.println("----------------");
-
-
-            Set<UserInfo> postPageResult = handler.getPostPageResult(urls);
-
-//            MergeManager<UserInfo> mergeManager=new MergeManager<>(UserInfo.sortBySignDays);
-//
-//            for (UserInfo result:postPageResult){
-//                //System.out.println(result.hasNext() +"     "+result.getNextUrl());
-//                //print(result.getParseResult());
-//                mergeManager.addPart(result);
-//            }
-//
-//            print(mergeManager.merges());
-
-            //Set<UserInfo> rankTop = handler.getRankTop(5);
-
-
+            Set<UserInfo> infos = handler.getPagesAllof(3);
 
             Set<UserInfo> res= new TreeSet(UserInfo.sortBySignDays);
-            res.addAll(postPageResult);
+            res.addAll(infos);
             print(res);
 
             long s = System.currentTimeMillis() - st;
 
             System.out.println("seconds time: " + ((s / 1000l))+"s");
-            handler.shutdown();
-
         }catch (Exception e){
          e.printStackTrace();
-        }finally {
-
+        } finally {
+            handler.shutdown();
         }
     }
-
-
 
     static void print(Collection list){
         if(list != null){

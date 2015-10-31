@@ -157,6 +157,17 @@ public class SignRankHandler {
     }
 
 
+    public Set<UserInfo> getPagesAllof(int size) throws Exception{
+        Set<IndexPagerResult> indexPageResult =getIndexPageResult(size);
+
+        Set<String> urls=new HashSet<>();
+        for (IndexPagerResult result:indexPageResult){
+            urls.addAll(result.getPostUrl());
+        }
+
+        return getPostPageResult(urls);
+    }
+
     public void shutdown(){
         try {
             sThreadPoolExecutor.shutdownNow();
@@ -165,4 +176,5 @@ public class SignRankHandler {
         }
 
     }
+
 }
