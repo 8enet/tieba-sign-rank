@@ -16,6 +16,12 @@ import java.util.regex.Pattern;
 public class IndexPagerResult extends SampleResult<Set<UserInfo>> implements PageResult<UserInfo>,DocumentPaser<IndexPagerResult> {
 
 
+    public IndexPagerResult() {
+    }
+
+    public IndexPagerResult(int ignoreDays) {
+        super(ignoreDays);
+    }
 
     @Override
     public boolean hasNext() {
@@ -48,8 +54,6 @@ public class IndexPagerResult extends SampleResult<Set<UserInfo>> implements Pag
         Elements select = document.body().select("a.sign_highlight.j_user_card ");
         Element element = null;
         UserInfo user = null;
-        Pattern pattern = Pattern.compile("[^\\d]");
-
         //
         for (int i = 0; i < select.size(); i++) {
             try {
@@ -57,10 +61,11 @@ public class IndexPagerResult extends SampleResult<Set<UserInfo>> implements Pag
                 user = new UserInfo();
                 user.setHref(element.attr("href"));
                 user.setName(element.text());
-                String s = pattern.matcher(element.attr("title")).replaceAll("");
+                String s = sRegEx_d.matcher(element.attr("title")).replaceAll("");
                 user.setSignDays(Integer.parseInt(s.substring(0, s.length() - 2)));
-                list.add(user);
-
+                if(hasAdd(user)){
+                    list.add(user);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

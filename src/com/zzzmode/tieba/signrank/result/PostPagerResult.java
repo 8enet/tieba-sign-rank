@@ -15,6 +15,14 @@ import java.util.regex.Pattern;
  * Created by zl on 15/1/19.
  */
 public class PostPagerResult extends SampleResult<Set<UserInfo>> implements PageResult<UserInfo>, DocumentPaser<PostPagerResult> {
+
+    public PostPagerResult() {
+    }
+
+    public PostPagerResult(int ignoreDays) {
+        super(ignoreDays);
+    }
+
     @Override
     public boolean hasNext() {
         return canNext;
@@ -38,16 +46,17 @@ public class PostPagerResult extends SampleResult<Set<UserInfo>> implements Page
         Elements select = document.body().select("a.p_author_name.sign_highlight.j_user_card");
         Element element = null;
         UserInfo user = null;
-        Pattern pattern = Pattern.compile("[^\\d]");
         for (int i = 0; i < select.size(); i++) {
             try {
                 element = select.get(i);
                 user = new UserInfo();
                 user.setHref(element.attr("href"));
                 user.setName(element.text());
-                String s = pattern.matcher(element.attr("title")).replaceAll("");
+                String s = sRegEx_d.matcher(element.attr("title")).replaceAll("");
                 user.setSignDays(Integer.parseInt(s.substring(0, s.length() - 2)));
-                list.add(user);
+                if(hasAdd(user)){
+                    list.add(user);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

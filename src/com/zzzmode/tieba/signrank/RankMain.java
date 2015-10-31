@@ -20,22 +20,20 @@ public class RankMain {
 
         try {
 
-
             long st=System.currentTimeMillis();
 
             System.out.println("-------- SignRankHandler --------");
 
             SignRankHandler handler=new SignRankHandler("java");
+            handler.setIgnoreLowDays(500);
 
             Set<IndexPagerResult> indexPageResult = handler.getIndexPageResult(3);
+
+
             Set<String> urls=new HashSet<>();
             for (IndexPagerResult result:indexPageResult){
-
                 urls.addAll(result.getPostUrl());
             }
-
-
-
 
             System.out.println(" all urls : "+urls.size());
             System.out.println("----------------");
@@ -52,20 +50,19 @@ public class RankMain {
 //            }
 //
 //            print(mergeManager.merges());
+
+            //Set<UserInfo> rankTop = handler.getRankTop(5);
+
+
+
             Set<UserInfo> res= new TreeSet(UserInfo.sortBySignDays);
             res.addAll(postPageResult);
             print(res);
 
+            long s = System.currentTimeMillis() - st;
 
-            if(true){
-                double s=System.currentTimeMillis()-st;
-                System.out.println("seconds time: "+( (s/1000d)));
-                handler.shutdown();
-                return;
-            }
-
-
-
+            System.out.println("seconds time: " + ((s / 1000l))+"s");
+            handler.shutdown();
 
         }catch (Exception e){
          e.printStackTrace();
@@ -75,26 +72,6 @@ public class RankMain {
     }
 
 
-    public static void aaa(){
-
-        System.out.println(System.getProperty("user.timezone"));
-
-        System.out.println(new Date().toLocaleString());
-        Calendar calendar=Calendar.getInstance();
-
-        calendar.setTimeZone(TimeZone.getDefault());
-        //calendar.add(Calendar.DAY_OF_MONTH,1);
-        calendar.set(Calendar.HOUR_OF_DAY,15);
-        calendar.set(Calendar.MINUTE,9);
-        calendar.set(Calendar.MILLISECOND,0);
-
-        calendar.set(Calendar.SECOND,0);
-
-        System.out.println(calendar.getTimeInMillis());
-        System.out.println(new Date(calendar.getTimeInMillis()).toLocaleString());
-
-        System.out.println(TimeUnit.MINUTES.toMillis(30));
-    }
 
     static void print(Collection list){
         if(list != null){

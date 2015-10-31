@@ -2,7 +2,6 @@ package com.zzzmode.tieba.signrank.work;
 
 import com.zzzmode.tieba.signrank.UserInfo;
 import com.zzzmode.tieba.signrank.result.IndexPagerResult;
-import com.zzzmode.tieba.signrank.result.PageResult;
 import com.zzzmode.tieba.signrank.result.PostPagerResult;
 import com.zzzmode.tieba.signrank.result.RankPagerResult;
 
@@ -16,10 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by zl on 15/1/19.
  */
 public class SignRankHandler {
-    private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(150, 200, 5, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
+    private static ThreadPoolExecutor sThreadPoolExecutor = new ThreadPoolExecutor(150, 200, 5, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
     private String baName;
     private int spiderDepth=0;
     private AtomicInteger count=new AtomicInteger();
+
+    private int mIgnoreLowDays=100; //签到低于此值的id 忽略掉，
 
     public SignRankHandler(String bName) {
         try {
@@ -28,6 +29,10 @@ public class SignRankHandler {
             e.printStackTrace();
             this.baName = bName;
         }
+    }
+
+    public void setIgnoreLowDays(int ignoreLowDays) {
+        this.mIgnoreLowDays = ignoreLowDays;
     }
 
     /**
@@ -41,11 +46,11 @@ public class SignRankHandler {
         if (indexPage <= 0)
             indexPage = 1;
         for (int i = 0; i < indexPage; i++) {
-            ranks.add(new PageSpider(baseUrl + (i + 1), new RankPagerResult()));
+            ranks.add(new PageSpider(baseUrl + (i + 1), new RankPagerResult(mIgnoreLowDays)));
             count.incrementAndGet();
         }
 
-        final Set<RankPagerResult> result = getResult(threadPoolExecutor.invokeAll(ranks));
+        final Set<RankPagerResult> result = getResult(sThreadPoolExecutor.invokeAll(ranks));
         Set<UserInfo> retUsers=new TreeSet<>(UserInfo.sortByTop);
         for (RankPagerResult rpr:result){
             if(rpr != null){
@@ -85,10 +90,10 @@ public class SignRankHandler {
         String basUrl = Configs.HTTP.BASE_URL + "/f?kw=" + baName + "&ie=utf-8&pn=";
         List<PageSpider<IndexPagerResult>> tasks = new ArrayList<>();
         for (int i = 0; i < indexPage; i++) {
-            tasks.add(new PageSpider(basUrl + (i * 50), new IndexPagerResult()));
+            tasks.add(new PageSpider(basUrl + (i * 50), new IndexPagerResult(mIgnoreLowDays)));
             count.incrementAndGet();
         }
-        return getResult(threadPoolExecutor.invokeAll(tasks));
+        return getResult(sThreadPoolExecutor.invokeAll(tasks));
     }
 
 
@@ -108,10 +113,10 @@ public class SignRankHandler {
 
         List<PageSpider<PostPagerResult>> tasks = new ArrayList<>();
         for (String url : posts) {
-            tasks.add(new PageSpider(Configs.HTTP.BASE_URL + url, new PostPagerResult()));
+            tasks.add(new PageSpider(Configs.HTTP.BASE_URL + url, new PostPagerResult(mIgnoreLowDays)));
             count.incrementAndGet();
         }
-        Set<PostPagerResult> result = getResult(threadPoolExecutor.invokeAll(tasks));
+        Set<PostPagerResult> result = getResult(sThreadPoolExecutor.invokeAll(tasks));
         posts.clear();
 
         for (PostPagerResult pos : result) {
@@ -126,7 +131,7 @@ public class SignRankHandler {
         if (posts.isEmpty() || spiderDepth > Configs.PAGE.MAX_NEXT_PAGE) {
             return;
         }
-        System.out.println(" Recursion Spider ... ");
+        System.out.println(" Recursion Spider ... "+spiderDepth);
         spiderDepth++;
         getPostPageResult(posts, retUsers);
     }
@@ -154,9 +159,9 @@ public class SignRankHandler {
 
     public void shutdown(){
         try {
-            threadPoolExecutor.shutdownNow();
+            sThreadPoolExecutor.shutdownNow();
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
     }
